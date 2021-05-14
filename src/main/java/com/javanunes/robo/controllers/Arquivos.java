@@ -5,9 +5,12 @@
  */
 package com.javanunes.robo.controllers;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.Properties;
 
 /**
@@ -16,6 +19,8 @@ import java.util.Properties;
  */
 public class Arquivos {
     private final String CONFIGURACOES_BASICAS_INICIALIZACAO = "/tmp/config.sys";
+    private final String CONFIGURACOES_SALAS_LOGS = "/tmp/lastsalas.log";
+    private final String CONFIGURACOES_BATEPAPO_LOGS = "/tmp/chats.log";
     
     public boolean existe(String arquivo){
         try{
@@ -32,6 +37,39 @@ public class Arquivos {
             return false;
         }
     }
+    
+    public void salvarUltimaSala(String ultimaSala){
+        if(!ultimaSala.isEmpty()){
+            try{
+               FileWriter arq = new FileWriter(CONFIGURACOES_SALAS_LOGS,true);
+               arq.write(ultimaSala+"\n");
+               arq.close();
+            }
+            catch(Exception e){
+              System.out.println("Impossivel escrever em log de ultimas da sala: "+e);
+            }
+        }
+    }
+    
+    public void listarConteudoDe(String arquivo){
+            if(!arquivo.isEmpty()){
+            try{
+               BufferedReader br = new BufferedReader(new FileReader(arquivo));
+               while(br.ready()){
+                  System.out.println("C:\\>"+br.readLine());
+               }
+               br.close();
+            }
+            catch(Exception e){
+               System.out.println("Nao deu!");
+            }
+        }
+    }
+    
+    public void listarConteudoDeLogUtilmasSalas(){
+          listarConteudoDe(CONFIGURACOES_SALAS_LOGS);
+    }
+    
     
     public void salvarValoresCampos(Mensagens ms){
         try{        
